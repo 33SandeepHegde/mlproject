@@ -1,0 +1,4 @@
+xtra=np.delete(train_array, 1, axis=1)
+            ytra=train_array[:, 1]
+            xtes=np.delete(test_array, 1, axis=1)
+            ytes=test_array[:, 1]

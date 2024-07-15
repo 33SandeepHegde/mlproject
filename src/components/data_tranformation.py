@@ -32,12 +32,12 @@ class DataTransformation:
             categorical_columns = [
                 "Gender",
                 "Subscription Type",
-                "Contract Length",
+                "Contract Length"
             ]
 
             num_pipeline= Pipeline(
                 steps=[
-                ("imputer",SimpleImputer(strategy="median")),
+               
                 ("scaler",StandardScaler())
 
                 ]
@@ -62,8 +62,6 @@ class DataTransformation:
                 ("cat_pipelines",cat_pipeline,categorical_columns)
 
                 ]
-
-
             )
 
             return preprocessor
@@ -76,6 +74,7 @@ class DataTransformation:
         try:
             train_df=pd.read_csv(train_path)
             test_df=pd.read_csv(test_path)
+            # print(f"Shape of data trans {test_df}")
 
             logging.info("Read train and test data completed")
 
@@ -84,11 +83,11 @@ class DataTransformation:
             preprocessing_obj=self.get_data_transformer_object()
 
             target_column_name="Churn"
-            numerical_columns = ["Support Calls", "Payment Delay","Last Interaction","Usage Frequency","Tenure"]
+            numerical_columns = ["Support Calls","Total Spend","Payment Delay","Last Interaction","Usage Frequency","Tenure"]
 
             input_feature_train_df=train_df.drop(columns=[target_column_name,"CustomerID","Total Spend"],axis=1)
             target_feature_train_df=train_df[target_column_name]
-
+            # print(input_feature_train_df)
             input_feature_test_df=test_df.drop(columns=[target_column_name,"CustomerID","Total Spend"],axis=1)
             target_feature_test_df=test_df[target_column_name]
 
@@ -98,11 +97,12 @@ class DataTransformation:
 
             input_feature_train_arr=preprocessing_obj.fit_transform(input_feature_train_df)
             input_feature_test_arr=preprocessing_obj.transform(input_feature_test_df)
-
+           
             train_arr = np.c_[
                 input_feature_train_arr, np.array(target_feature_train_df)
             ]
             test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
+            
 
             logging.info(f"Saved preprocessing object.")
 
